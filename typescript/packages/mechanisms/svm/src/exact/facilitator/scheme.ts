@@ -32,7 +32,11 @@ import {
 import { SettlementCache } from "../../settlement-cache";
 import type { FacilitatorSvmSigner } from "../../signer";
 import type { ExactSvmPayloadV2 } from "../../types";
-import { decodeTransactionFromPayload, getTokenPayerFromTransaction } from "../../utils";
+import {
+  decodeTransactionFromPayload,
+  getTokenPayerFromTransaction,
+  transactionMessageHash,
+} from "../../utils";
 
 /**
  * SVM facilitator implementation for the Exact payment scheme.
@@ -381,9 +385,13 @@ export class ExactSvmScheme implements SchemeNetworkFacilitator {
       };
     }
 
-    // Duplicate settlement check: reject if this transaction is already being settled.
-    // Must occur before any async work so concurrent calls for the same tx are caught.
-    const txKey = exactSvmPayload.transaction;
+    // Decode the transaction to compute the message hash used as the cache key.
+    // Must remain synchronous (before any await) so concurrent settle calls for
+    // the same payment are caught before any async work begins.
+    const decodedTx = decodeTransactionFromPayload(exactSvmPayload);
+
+    // Duplicate settlement check keyed on message hash (immune to mutable fee-payer sig at slot 0).
+    const txKey = transactionMessageHash(decodedTx);
     if (this.settlementCache.isDuplicate(txKey)) {
       return {
         success: false,
