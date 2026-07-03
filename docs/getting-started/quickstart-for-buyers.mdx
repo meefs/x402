@@ -50,6 +50,9 @@ There are pre-configured [examples available in the x402 repo](https://github.co
 
     # For TON (TVM) support, also add:
     npm install @x402/tvm
+
+    # For NEAR support, also add:
+    npm install @x402/near
     ```
   </Tab>
   <Tab title="Go">
@@ -237,6 +240,19 @@ const keyPair = await mnemonicToPrivateKey(process.env.TVM_MNEMONIC!.split(" "))
 const tvmSigner = toClientTvmSigner(keyPair, {
   network: "tvm:-3",
   apiKey: process.env.TONCENTER_API_KEY,
+});
+```
+
+#### NEAR
+
+Use `@x402/near` to instantiate a signer:
+
+```typescript
+import { createClientNearSigner } from "@x402/near";
+
+const nearSigner = createClientNearSigner({
+  accountId: "alice.testnet",
+  secretKey: process.env.NEAR_SECRET_KEY!, // ed25519:... full-access key
 });
 ```
 
@@ -560,6 +576,15 @@ You can register multiple payment schemes to handle different networks:
         }),
       ),
     );
+
+    // For NEAR support, also add:
+    import { ExactNearScheme, createClientNearSigner } from "@x402/near";
+
+    const nearSigner = createClientNearSigner({
+      accountId: "alice.testnet",
+      secretKey: process.env.NEAR_SECRET_KEY!, // ed25519:... full-access key
+    });
+    client.register("near:*", new ExactNearScheme(nearSigner));
     ```
   </Tab>
   <Tab title="Go">
@@ -692,7 +717,7 @@ try {
 
 ### Summary
 
-* Install x402 client packages (`@x402/fetch` or `@x402/axios`) and mechanism packages (`@x402/evm`, `@x402/svm`, `@x402/tvm`, `@x402/aptos`, `@x402/keeta`)
+* Install x402 client packages (`@x402/fetch` or `@x402/axios`) and mechanism packages (`@x402/evm`, `@x402/svm`, `@x402/tvm`, `@x402/aptos`, `@x402/keeta`, `@x402/near`)
 * Create a wallet signer
 * Create an `x402Client` and register payment schemes (`exact` for fixed-price, `upto` for usage-based billing, `batch-settlement` for batched EVM micropayments when the server advertises it)
 * Use the provided wrapper/interceptor to make paid API requests

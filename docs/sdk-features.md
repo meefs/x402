@@ -34,6 +34,7 @@ This page tracks which features are implemented in each SDK (TypeScript, Go, Pyt
 | aptos | ✅ | ❌ | ❌ |
 | hedera | ✅ | ❌ | ❌ |
 | keeta | ✅ | ❌ | ❌ |
+| near | ✅ | ❌ | ❌ |
 | ccd (Concordium) | ✅ | ❌ | ❌ |
 
 ## Mechanisms
@@ -49,6 +50,7 @@ This page tracks which features are implemented in each SDK (TypeScript, Go, Pyt
 | exact | hedera | - | ✅ | ❌ | ❌ |
 | exact | tvm | - | ✅ | ❌ | ✅ |
 | exact | keeta | - | ✅ | ❌ | ❌ |
+| exact | near | - | ✅ | ❌ | ❌ |
 | exact | ccd (Concordium) | sponsored V1 | ✅ | ❌ | ❌ |
 | upto | evm | `permit2` | ✅ | ✅ | ✅ |
 | batch-settlement | evm | `eip3009` | ✅ | ✅ | ✅ |
